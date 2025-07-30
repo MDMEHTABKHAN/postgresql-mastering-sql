@@ -28,6 +28,3 @@ SELECT * FROM students WHERE city = 'London';
 
 -- 9. Insert a student with only required fields
 INSERT INTO students (first_name, last_name, age) VALUES ('Eve', 'White', 19);
-
--- 10. Update email for a specific student
-UPDATE students SET email = 'new.email@email.com' WHERE first_name =
