@@ -1,3 +1,4 @@
+SELECT version();
 
 
 -- 1. Create table

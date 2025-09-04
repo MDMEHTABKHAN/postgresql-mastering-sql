@@ -11,6 +11,8 @@ CREATE TABLE employee(
     salary NUMERIC(10,2) NOT NULL
 );
 
+SELECT * FROM employee;
+
 INSERT INTO employee (first_name, last_name, email, age, department_id, department_name, salary) VALUES
 ('John', 'Doe', 'john.doe@example.com', 30, 1, 'HR', 60000.00),
 ('Jane', 'Smith', 'jane.smith@example.com', 28, 2, 'Finance', 65000.00),
