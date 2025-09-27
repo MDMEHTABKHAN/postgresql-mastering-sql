@@ -217,5 +217,187 @@ WHERE name = 'Henry';
 DELETE FROM orders12
 WHERE product_id = 3; 
 
-DELETE FROM orders12
-WHERE quantity > 3;
+
+SELECT SUM(price) FROM products1;
+
+
+SELECT MIN(price) FROM products1;
+
+SELECT MAX(price) FROM products1;
+
+SELECT AVG(price) FROM products1;
+
+SELECT COUNT(*) FROM products1;
+
+
+
+SELECT product_id, SUM(quantity) AS total_quantity
+FROM orders12
+GROUP BY product_id
+ORDER BY  SUM(quantity);
+
+
+
+
+SELECT p.name AS product, SUM(o.quantity) AS total_quantity
+FROM orders12 o
+JOIN products1 p ON o.product_id = p.product_id
+GROUP BY p.name;
+
+
+
+SELECT p.name AS product, SUM(o.quantity) AS total_quantity
+FROM orders12 o
+JOIN products1 p ON o.product_id = p.product_id
+GROUP BY p.name
+HAVING SUM(o.quantity) > 3;
+
+
+SELECT u.name AS customer, COUNT(*) AS total_orders
+FROM orders12 o
+JOIN users1 u ON o.user_id = u.user_id
+GROUP BY u.name;
+
+
+SELECT AVG(p.price) AS avg_price
+FROM orders12 o
+JOIN products1 p ON o.product_id = p.product_id;
+
+SELECT p.name AS product, MAX(o.quantity) AS max_quantity
+FROM orders12 o
+JOIN products1 p ON o.product_id = p.product_id
+GROUP BY p.name;
+
+
+
+
+SELECT o.order_id, u.name AS customer, p.name AS product, o.quantity
+FROM orders12 o
+INNER JOIN users1 u ON o.user_id = u.user_id
+INNER JOIN products1 p ON o.product_id = p.product_id;
+
+
+
+-- Get all orders with user name and product name
+SELECT o.order_id, u.name AS customer, p.name AS product, o.quantity
+FROM orders12 o
+INNER JOIN users1 u ON o.user_id = u.user_id
+INNER JOIN products1 p ON o.product_id = p.product_id;
+
+
+
+-- List all orders and users (even if user data is missing)
+SELECT o.order_id, u.name AS customer, o.quantity
+FROM orders12 o
+RIGHT JOIN users1 u ON o.user_id = u.user_id;
+
+
+
+-- List all users and all orders
+SELECT u.name AS customer, o.order_id, o.quantity
+FROM users1 u
+FULL OUTER JOIN orders12 o ON u.user_id = o.user_id;
+
+
+
+SELECT o.order_id, p.name AS product, o.quantity
+FROM orders12 o
+INNER JOIN products1 p ON o.product_id = p.product_id;
+
+
+SELECT u.name AS customer, o.order_id, o.quantity
+FROM users1 u
+LEFT JOIN orders12 o ON u.user_id = o.user_id;
+
+
+SELECT p.name AS product, o.order_id, o.quantity
+FROM products1 p
+LEFT JOIN orders12 o
+ON p.product_id = o.product_id;
+
+
+
+
+
+CREATE VIEW highest_price AS
+SELECT * FROM products1
+WHERE price >=70000;
+
+
+SELECT * FROM highest_price;
+
+
+
+DROP VIEW highest_price;
+
+CREATE VIEW details_products1 AS
+SELECT * FROM products1;
+
+
+SELECT  * FROM details_products1;
+
+DROP VIEW details_products1;
+
+
+
+CREATE VIEW products_details AS
+SELECT name AS full_name, price, stock
+FROM products1;
+
+
+SELECT * FROM products_details;
+
+
+
+SELECT * FROM products_details WHERE price >= 10000;
+
+
+SELECT * FROM products_details WHERE stock >= 8;
+
+
+SELECT full_name, stock FROM products_details WHERE stock BETWEEN 5 AND 10;
+
+
+
+
+
+
+CREATE VIEW order_summary AS
+SELECT o.order_id,
+        u.name AS customer,
+        p.name AS product,
+        o.quantity,
+        (o.quantity * p.price) AS total_price
+FROM orders12 o
+JOIN users1 u ON o.user_id = u.user_id
+JOIN products1 p ON o.product_id = p.product_id;
+
+SELECT * FROM order_summary;
+
+DROP VIEW order_summary;
+
+
+CREATE VIEW product_sales AS
+SELECT p.name AS product,
+       SUM(o.quantity) AS total_quantity,
+       SUM(o.quantity * p.price) AS total_sales
+FROM orders12 o
+JOIN products1 p ON o.product_id = p.product_id
+GROUP BY p.name;
+
+SELECT * FROM product_sales;
+
+DROP VIEW product_sales, order_summary;
+
+
+
+
+CREATE VIEW active_users AS
+SELECT * FROM users1
+WHERE created_at IS NOT NULL;
+
+-- Update through view
+UPDATE active_users
+SET name = 'Alice Updated'
+WHERE user_id = 1;
+

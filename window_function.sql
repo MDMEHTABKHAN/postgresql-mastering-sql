@@ -115,3 +115,92 @@ WHERE Salary > 50000;
 
 
 CREATE INDEX inx_Name ON employee12(Name)
+
+
+SELECT * FROM employee12;
+
+SELECT EmpID, name, department,salary,
+ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary) as rowNum
+FROM employee12;
+
+
+
+
+SELECT EmpID, name, department,salary,
+RANK() OVER (PARTITION BY department ORDER BY salary) as rnk
+FROM employee12;
+
+
+SELECT EmpID, name, department,salary,
+DENSE_RANK() OVER (PARTITION BY department ORDER BY salary) as rowNum
+FROM employee12;
+
+
+
+-- NTILE(n) divides rows into n buckets per partition.
+SELECT EmpID, name, department,salary,
+NTILE(1) OVER (PARTITION BY department ORDER BY salary) as rowNum
+FROM employee12;
+
+
+SELECT *
+FROM (
+    SELECT 
+        EmpID,
+        name,
+        department,
+        salary,
+        ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) AS rn
+    FROM employee12
+) AS ranked
+WHERE rn <= 2;
+
+
+
+SELECT *
+FROM (
+    SELECT 
+        EmpID,
+        name,
+        department,
+        salary,
+        DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS drnk
+    FROM employee12
+) AS ranked
+WHERE drnk >= 2;
+
+
+SELECT * FROM employee12;
+
+
+SELECT MAX(salary) Max_Salary FROM employee12
+WHERE salary < (
+    SELECT MAX(salary) FROM employee
+);
+
+
+SELECT salary 
+FROM (
+    SELECT salary,
+    ROW_NUMBER() OVER(ORDER BY salary) as rn
+    FROM employee12) as t 
+    WHERE rn= 2
+
+SELECT department, COUNT(*) AS Employeecount
+FROM employee12
+GROUP BY department HAVING COUNT(*) >= 3;
+
+
+SELECT department, AVG(salary) as avg_salary
+FROM employee12
+GROUP BY department
+HAVING AVG(salary) > 50000;
+
+
+
+
+
+SELECT * FROM employee12
+WHERE salary = (SELECT MAX(salary)
+FROM employee12
+);

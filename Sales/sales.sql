@@ -33,3 +33,32 @@ DROP TABLE sales.orders, sales.customers;
 
 SELECT AGE(NOW(), '1999-02-14');
 
+
+
+
+CREATE TABLE course_enrollments (
+    student_ID INT,
+    course_ID INT,
+    PRIMARY KEY(student_id, course_id)
+);
+
+
+CREATE TABLE employee(
+    -- employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    -- employee_id SERIAL PRIMARY KEY
+    -- employee-id BIGSERIAL PRIMARY KEY,
+    -- employee_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    employee_id INT IDENTITY(1,1) PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    age INT NOT NULL CHECK( age >= 18)
+
+);
+
+CREATE TABLE depaartments (
+    dept_id INT,
+    department_name VARCHAR(100) NOT NULL DEFAULT 'IT'
+    FOREIGN KEY(dept_id) REFERENCES employee(employee_id)
+)
+
